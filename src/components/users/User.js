@@ -1,11 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
 import Repos from './../repos/Repos';
+import githubContext from '../../context/github/githubContext';
 
-const User = ({ getUser, getUserRepos, loading, repos, user: { name, hireable, avatar_url, location,
-    bio, html_url, company, blog, followers, following, public_repos, public_gists } }) => {
+const User = () => {
+
+    const context = useContext(githubContext);
+
+    const { user, getUser, loading, repos, getUserRepos } = context;
+
+    const { name, hireable, avatar_url, location,
+        bio, html_url, company, blog, followers, following, public_repos, public_gists } = user;
 
     const { login } = useParams();
 
@@ -21,7 +27,7 @@ const User = ({ getUser, getUserRepos, loading, repos, user: { name, hireable, a
     return (
         <Fragment>
             <Link to="/" className="btn btn-light"> Back to Search</Link>
-            Hireable: {''}
+            Hireable: {' '}
             {hireable ? <i className="fas fa-check text-success" /> : <i className="fas fa-times-circle text-danger" />}
             <div className="card grid-2">
                 <div className="all-center">
@@ -63,14 +69,6 @@ const User = ({ getUser, getUserRepos, loading, repos, user: { name, hireable, a
             <Repos repos={repos} />
         </Fragment>
     );
-}
-
-User.propTypes = {
-    loading: PropTypes.bool.isRequired,
-    user: PropTypes.object.isRequired,
-    repos: PropTypes.array.isRequired,
-    getUser: PropTypes.func.isRequired,
-    getUserRepos: PropTypes.func.isRequired,
 }
 
 export default User;
